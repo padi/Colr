@@ -30,4 +30,12 @@ class Color
 
     @tags = tags
   end
+
+  def self.find hex, &block
+    BW::HTTP.get "http://www.color.org/json/color/#{hex}" do |response|
+      p response.body.to_str
+      # for now, pass nil
+      block.call nil
+    end
+  end
 end

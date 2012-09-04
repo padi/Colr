@@ -20,5 +20,20 @@ class SearchController < UIViewController
     @search.sizeToFit
     @search.center = CGPointMake(self.view.frame.size.width / 2, @text_field.center.y + 40)
     self.view.addSubview @search
+
+    @search.when UIControlEventTouchUpInside do
+      @search.enabled = false
+      @text_field.enabled = false
+
+      hex = @text_field.text
+      # chop off any leading #s
+      hex = hex[1..-1] if hex[0] == "#"
+
+      # finding colors via http should be done inside model, not here, so Color.find
+      Color.find hex do |color|
+        @search.enabled = true
+        @text_field.enabled = true
+      end
+    end
   end
 end
