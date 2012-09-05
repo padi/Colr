@@ -50,6 +50,15 @@ class ColorController < UIViewController
     ]
     self.view.addSubview @add
 
+    @add.when UIControlEventTouchUpInside do
+      @add.enabled = false
+      @text_field.enabled = false
+
+      self.color.add_tag @text_field.text do
+        refresh
+      end
+    end
+
     # The table for our color's tags
     table_frame = [
       [0,@info_container.frame.size.height],
@@ -77,5 +86,16 @@ class ColorController < UIViewController
 
     cell
  end
+
+  def refresh
+    Color.find self.color.hex do |color|
+      self.color = color
+
+      @tag_table_view.reloadData
+
+      @add.enabled = true
+      @text_field.enabled = true
+    end
+  end
 end
 

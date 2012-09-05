@@ -17,6 +17,12 @@ class Color
     @tags ||= []
   end
 
+  def add_tag(tag, &block)
+    BW::HTTP.post("http://www.colr.org/js/color/#{self.hex}/addtag/", payload: {tags: tag}) do |response|
+      block.call
+    end
+  end
+
   def tags= tags
     if tags.first.is_a? Hash
       tags = tags.collect { |tag| Tag.new tag }
