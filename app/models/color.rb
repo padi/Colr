@@ -12,17 +12,12 @@ class Color
     }
   end
 
-  # Custom getter/setter methods for tags
+  # Custom getter method for tags
   def tags
     @tags ||= []
   end
 
-  def add_tag(tag, &block)
-    BW::HTTP.post("http://www.colr.org/js/color/#{self.hex}/addtag/", payload: {tags: tag}) do |response|
-      block.call
-    end
-  end
-
+  # Custom setter method for tags
   def tags= tags
     if tags.first.is_a? Hash
       tags = tags.collect { |tag| Tag.new tag }
@@ -35,6 +30,12 @@ class Color
     }
 
     @tags = tags
+  end
+
+  def add_tag(tag, &block)
+    BW::HTTP.post("http://www.colr.org/js/color/#{self.hex}/addtag/", payload: {tags: tag}) do |response|
+      block.call
+    end
   end
 
   def self.find hex, &block
