@@ -48,5 +48,6 @@ class SearchController < UIViewController
 
   def open_color color
     p "Opening #{color}"
+    self.navigationController.pushViewController ColorController.alloc.initWithColor(color), animated: true
   end
 end
