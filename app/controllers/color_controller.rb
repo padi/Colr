@@ -56,10 +56,26 @@ class ColorController < UIViewController
       [self.view.bounds.size.width,
        self.view.bounds.size.height - @info_container.frame.size.height - self.navigationController.navigationBar.frame.size.height]
     ]
-    @table_view = UITableView.alloc.initWithFrame table_frame, style: UITableViewStylePlain
-    self.view.addSubview @table_view
+    @tag_table_view = UITableView.alloc.initWithFrame table_frame, style: UITableViewStylePlain
+    self.view.addSubview @tag_table_view
 
-    @table_view.dataSource = self
+    @tag_table_view.dataSource = self
   end
+
+  def tableView tableView, numberOfRowsInSection:section
+    self.color.tags.count
+  end
+
+  def tableView tableView, cellForRowAtIndexPath:indexPath
+    @reuseIdentifier ||= "CELL_IDENTIFIER"
+
+    cell = tableView.dequeueReusableCellWithIdentifier(@reuseIdentifier) || begin
+      UITableViewCell.alloc.initWithStyle UITableViewCellStyleDefault, reuseIdentifier: @reuseIdentifier
+    end
+
+    cell.textLabel.text = self.color.tags[indexPath.row].name
+
+    cell
+ end
 end
 
