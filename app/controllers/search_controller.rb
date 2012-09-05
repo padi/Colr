@@ -31,9 +31,23 @@ class SearchController < UIViewController
 
       # finding colors via http should be done inside model, not here, so Color.find
       Color.find hex do |color|
+        if color.nil?
+          @search.setTitle("None :(", forState: UIControlStateNormal)
+        else
+          @search.setTitle("Found", forState: UIControlStateNormal)
+          #@search.setTitle("Search", forState: UIControlStateNormal)
+          self.open_color color
+        end
+
         @search.enabled = true
         @text_field.enabled = true
       end
+
     end
+  end
+
+  def open_color color
+    p "Opening #{color}"
+    self.navigationController.pushViewController ColorController.alloc.initWithColor(color), animated: true
   end
 end
